@@ -4,38 +4,58 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="/src/sources/IconWeb.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/src/assets/IconWeb.ico" type="image/x-icon">
   <title>Tres en Raya</title>
+  <script type="module" src="./src/js/index.js" defer></script>
 </head>
 
 <body>
-  <h1 class="title">Tres en Raya</h1>
-  <p class="screen"></p>
+  <main>
+    <h1 class="title">Tres en Raya</h1>
+    <p class="screen"></p>
 
-  <div class="table">
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
-    <div class="block"></div>
+    <div class="table">
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+      <div class="block"></div>
+    </div>
+
+    <div class="controls">
+      <button class="initAndReset">Iniciar</button>
+      <button class="stop">Detener</button>
+    </div>
+
+    <footer>Desarrollado por <a href="https://github.com/mmoralheredia" target="_blank"
+        rel="noopener noreferrer">mmoralheredia</a>
+    </footer>
+  </main>
+
+  <div class="alertBackground">
+    <div class="gameMode">
+      <button id='closeGameMode' class="buttonCloseAlert">⨉</button>
+      <h1>Selecciona el modo de juego</h1>
+      <div class='controls'>
+        <button class='playerVsPC'>Jugador 1 VS CPU</button>
+        <button class='playerVsPlayer'>Jugador 1 VS Jugador 2</button>
+      </div>
+    </div>
+
+    <div class="winnerOrDraw">
+      <button id='closeWinnerOrDraw' class="buttonCloseAlert">⨉</button>
+      <h1>El ganador fue: <br><span>Jugador 1</span></h1>
+      <p>Volver a jugar:</p>
+      <div class='controls'>
+        <button class='playerVsPC'>Jugador 1 VS CPU</button>
+        <button class='playerVsPlayer'>Jugador 1 VS Jugador 2</button>
+      </div>
+    </div>
   </div>
-
-  <div class="controls">
-    <button class="initAndReset">Iniciar</button>
-    <button class="stop">Detener</button>
-  </div>
-
-  <footer>Desarrollado por
-    <a href="https://github.com/mmoralheredia" target="_blank" rel="noopener noreferrer">mmoralheredia</a>
-  </footer>
-
-
-
-  <script type="module" src="./src/js/index.js"></script>
 </body>
 
 </html>
