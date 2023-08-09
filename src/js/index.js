@@ -1,4 +1,5 @@
 import '../scss/index.scss'
+import { gameActive, changesCurrentPlayer, updateScreen, updateGameTable } from "./modules/functions.js";
 
 // Obtener elementos del DOM a manipular en js.
 const gameScreen = document.querySelector('.screen')
@@ -27,33 +28,45 @@ gameScreen.innerHTML = 'Presione \'Iniciar\'...'
 
 //Configuración de escucha de botones de pantalla principal 'Iniciar' y 'Detener'
 buttonInit.addEventListener('click', () => {
-    console.log("Presionado el botón iniciar")
     alertBackground.setAttribute('style', 'display: flex;')
     alertGameMode.setAttribute('style', 'display: flex;')
 })
 
 buttonStop.addEventListener('click', () => {
-    console.log('Botón Detener presionado')
+    if (gameStatus) {
+        // Initialize game variables and redeclare 'gameStatus' to false
+        gameTable.forEach((block, indexPlayed) => { })
+    }
 })
 
 
-// Eventos de escucha del tablero de juego
-tableBlocks.forEach((block, index) => {
-    block.addEventListener('click', function gameActive() {
-        console.log(`Juego activo presiono el bloque ${index + 1}`)
+//* Eventos de escucha del tablero de juego y  BUCLE DEL JUEGO ACTIVO.
+tableBlocks.forEach((block, indexPlayed) => {
+    block.addEventListener('click', () => {
+        if (gameStatus) {
+            gameActive(currentPlayer, gameTable, indexPlayed)
+            updateGameTable(block, currentPlayer)
+            // currentPlayer = changesCurrentPlayer(currentPlayer)
+            // updateScreen(gameScreen, currentPlayer)
+        } else if (!gameStatus) {
+            console.log('Estado del juego inactivo')
+        }
     })
 })
 
-
-//Botones dentro de las alertas de modo de juego.
+////////////////////////////////////////////////////////////////////////////////////////
+//Botones dentro de la alerta del modo de juego.
 buttonsGameMode.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
-            console.log('Botón de modo de juego Player 1 VS PC, fue presionado')
             alertBackground.setAttribute('style', 'display: none;')
             alertGameMode.setAttribute('style', 'display: none;')
+            gameStatus = true
+            currentPlayer = 'x'
+            // updateScreen(gameScreen, currentPlayer)
+
+
         } else if (button.className === 'playerVsPlayer') {
-            console.log('Botón de modo de juego Player 1 VS Player 2, fue presionado')
             alertBackground.setAttribute('style', 'display: none;')
             alertGameMode.setAttribute('style', 'display: none;')
         }
@@ -61,8 +74,9 @@ buttonsGameMode.forEach(button => {
 })
 
 buttonCloseGameMode.addEventListener('click', () => {
-    console.log("Botón de cerrar la alerta del \"modo de juego\" presionado")
     alertBackground.setAttribute('style', 'display: none;')
     alertGameMode.setAttribute('style', 'display: none;')
 })
 
+
+// Todo: Botones dentro de la alerta del WinnerOrDraw
