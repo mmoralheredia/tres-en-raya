@@ -1,8 +1,6 @@
 export function gameActive(currentPlayer, gameTable, indexPlayed) {
-
-    // Adding the current play to the game table
+    // Añade la jugada actual al tablero de juego
     gameTable[indexPlayed] = currentPlayer
-    // todo:
 }
 
 export function changesCurrentPlayer(currentPlayer) {
@@ -27,7 +25,15 @@ export function updateGameTable(block, currentPlayer) {
         block.innerHTML = `<div class='blkCross'></div>`
     } else if (currentPlayer === 'o') {
         block.innerHTML = `<div class='blkCircle'></div>`
-
     }
+}
 
+export function turnOnAlertScreen(alertBackground, alertGameMode) {
+    alertBackground.setAttribute('style', 'display: flex;')
+    alertGameMode.setAttribute('style', 'display: flex;')
+}
+
+export function turnOffScreenAlert(alertBackground, alertGameMode) {
+    alertBackground.setAttribute('style', 'display: none;')
+    alertGameMode.setAttribute('style', 'display: none;')
 }
