@@ -3,6 +3,5 @@ export function gameActive(currentPlayer, gameTable, indexPlayed) {
     if (gameTable[indexPlayed] === '') {
         gameTable[indexPlayed] = currentPlayer
     }
-    console.log(gameTable)
 }
 
