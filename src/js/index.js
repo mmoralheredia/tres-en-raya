@@ -1,10 +1,12 @@
 import '../scss/index.scss'
-import * as gameFunctions from "./modules/functions.js";
+import * as gameFunctions from "./modules/main.js";
+import * as visualsFunctions from './helpers/visuals.js'
+import * as assistantFunctions from './modules/assistant.js'
 
 // OBTENER ELEMENTOS DEL DOM A MANIPULAR EN JS, Y VALORES INICIALES DE EL JUEGO
 // Elementos de la pantalla principal.
 const gameScreen = document.querySelector('.screen')
-const buttonInit = document.querySelector('.controls .initAndReset')
+const buttonInit = document.querySelector('.controls .init')
 const buttonStop = document.querySelector('.controls .stop')
 const tableBlocks = document.querySelectorAll('.table .block')
 
@@ -32,35 +34,42 @@ gameScreen.innerHTML = 'Presione \'Iniciar\'...' //Valor inicial de la pantalla 
 //Escucha de botones de pantalla principal 'Iniciar' y 'Detener'
 buttonInit.addEventListener('click', () => {
     if (!gameStatus) {
-        gameFunctions.turnOnAlertScreen(alertBackground, alertGameMode)
+        visualsFunctions.turnOnAlertScreen(alertBackground, alertGameMode)
     }
+    console.log(`Botón "iniciar". Estado del juego: ${gameStatus}`)
 })
 
 buttonStop.addEventListener('click', () => {
     if (gameStatus) {
         // Reiniciar las variables del juego y restablecer el [gameStatus] a "false"
-        gameTable.forEach((block, indexPlayed) => {
-            // todo: Reiniciar el tablero de juego
-        })
+        tableBlocks.forEach(block => { block.innerHTML = '' })
+        for (let block in gameTable) { gameTable[block] = '' }
+        gameStatus = false
     }
+    console.log(`Botón "Detener". Estado del juego: ${gameStatus}`)
 })
 
 //* Controles de la pantalla de alerta [gameMode]
 buttonsGameMode.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
-            gameFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+            visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
             gameStatus = true
             currentPlayer = 'x'
+            console.log(`Modo de juego Jugador VS PC. Estado del juego: ${gameStatus}`)
 
         } else if (button.className === 'playerVsPlayer') {
-            gameFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+            visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+            gameStatus = true
+            currentPlayer = 'x'
+            console.log(`Modo de juego Jugador VS Jugador. Estado del juego: ${gameStatus}`)
         }
     })
 })
 
 buttonCloseGameMode.addEventListener('click', () => {
-    gameFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+    visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+    console.log(`Cerrar la pantalla del modo de juego. Estado del juego: ${gameStatus}`)
 })
 
 
@@ -68,18 +77,18 @@ buttonCloseGameMode.addEventListener('click', () => {
 buttonsWinnerOrDraw.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
-            gameFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
+            visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
             gameStatus = true
             currentPlayer = 'x'
 
         } else if (button.className === 'playerVsPlayer') {
-            gameFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
+            visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
         }
     })
 })
 
 buttonCloseWinnerOrDraw.addEventListener('click', () => {
-    gameFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
+    visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
 })
 
 
@@ -88,8 +97,8 @@ tableBlocks.forEach((block, indexPlayed) => {
     block.addEventListener('click', () => {
         if (gameStatus) {
             gameFunctions.gameActive(currentPlayer, gameTable, indexPlayed)
-            gameFunctions.updateGameTable(block, currentPlayer)
-            currentPlayer = gameFunctions.changesCurrentPlayer(currentPlayer)
+            visualsFunctions.updateTableBlocks(block, currentPlayer)
+            currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
             // todo: Terminar la ejecución de que hacer en cada jugada en el tablero
         }
     })
