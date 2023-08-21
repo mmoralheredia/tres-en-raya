@@ -41,15 +41,18 @@ tableBlocks.forEach((block, indexPlayed) => {
 
             if (gameFunctions.checkWinnerOrDraw(gameTable) === 'ganador') {
                 visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
-                textWinnerOrDraw.innerHTML = `Gana ${currentPlayer.toUpperCase()}`
+                textWinnerOrDraw.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
+                gameScreen.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
                 gameStatus = false
             } else if (gameFunctions.checkWinnerOrDraw(gameTable) === 'tabla') {
                 visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
                 textWinnerOrDraw.innerHTML = `Empate`
+                gameScreen.innerHTML = `Empate`
                 gameStatus = false
+            } else {
+                currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
+                visualsFunctions.updateScreen(gameScreen, currentPlayer)
             }
-            currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
-            visualsFunctions.updateScreen(gameScreen, currentPlayer)
         }
     })
 })
@@ -59,7 +62,6 @@ buttonInit.addEventListener('click', () => {
     if (!gameStatus) {
         visualsFunctions.turnOnAlertScreen(alertBackground, alertGameMode)
     }
-    console.log(`Botón "iniciar". Estado del juego: ${gameStatus}`)
 })
 
 buttonStop.addEventListener('click', () => {
@@ -74,36 +76,34 @@ buttonStop.addEventListener('click', () => {
 buttonsGameMode.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
-            visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
-            console.log(`Modo de juego Jugador VS PC. Estado del juego: ${gameStatus}`)
+            //todo: modo contra PC
 
         } else if (button.className === 'playerVsPlayer') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
+            buttonStop.click()
             gameStatus = true
-            currentPlayer = 'o'
+            currentPlayer = 'x'
             visualsFunctions.updateScreen(gameScreen, currentPlayer)
-            console.log(`Modo de juego Jugador VS Jugador. Estado del juego: ${gameStatus}`)
         }
     })
 })
 
 buttonCloseGameMode.addEventListener('click', () => {
     visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
-    console.log(`Cerrar la pantalla del modo de juego. Estado del juego: ${gameStatus}`)
 })
 
 //* Controles de la pantalla de alerta [winnerOrDraw]
 buttonsWinnerOrDraw.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
-            visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
+            //todo: modo contra PC
 
         } else if (button.className === 'playerVsPlayer') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
             buttonStop.click()
             gameStatus = true
             currentPlayer = 'x'
-            // todo: terminar la ejecución del menu de ganador o tabla.
+            visualsFunctions.updateScreen(gameScreen, currentPlayer)
         }
     })
 })
