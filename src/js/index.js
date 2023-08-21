@@ -82,7 +82,7 @@ buttonsGameMode.forEach(button => {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
             buttonStop.click()
             gameStatus = true
-            currentPlayer = 'x'
+            currentPlayer = assistantFunctions.randomPlayerInit()
             visualsFunctions.updateScreen(gameScreen, currentPlayer)
         }
     })
@@ -102,7 +102,7 @@ buttonsWinnerOrDraw.forEach(button => {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
             buttonStop.click()
             gameStatus = true
-            currentPlayer = 'x'
+            currentPlayer = assistantFunctions.randomPlayerInit()
             visualsFunctions.updateScreen(gameScreen, currentPlayer)
         }
     })
