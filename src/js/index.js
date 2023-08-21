@@ -19,6 +19,7 @@ const buttonsGameMode = document.querySelectorAll('.gameMode .controls button')
 const buttonCloseGameMode = document.querySelector('.gameMode #closeGameMode')
 // Alerta para mostrar el ganador, y la oportunidad de regresar al juego, asi como cambiar de modo de juego.
 const alertWinnerOrDraw = document.querySelector('.winnerOrDraw')
+const textWinnerOrDraw = document.querySelector('.winnerOrDraw h1')
 const buttonsWinnerOrDraw = document.querySelectorAll('.winnerOrDraw .controls button')
 const buttonCloseWinnerOrDraw = document.querySelector('.winnerOrDraw #closeWinnerOrDraw')
 
@@ -36,8 +37,17 @@ tableBlocks.forEach((block, indexPlayed) => {
     block.addEventListener('click', () => {
         if (gameStatus && block.innerHTML === '') {
             gameFunctions.gameActive(currentPlayer, gameTable, indexPlayed)
-            console.log(gameTable) //Comprobar que la jugada se anota en el tablero
             visualsFunctions.updateTableBlocks(block, currentPlayer)
+
+            if (gameFunctions.checkWinnerOrDraw(gameTable) === 'ganador') {
+                visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
+                textWinnerOrDraw.innerHTML = `Gana ${currentPlayer.toUpperCase()}`
+                gameStatus = false
+            } else if (gameFunctions.checkWinnerOrDraw(gameTable) === 'tabla') {
+                visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
+                textWinnerOrDraw.innerHTML = `Empate`
+                gameStatus = false
+            }
             currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
             visualsFunctions.updateScreen(gameScreen, currentPlayer)
         }
@@ -53,14 +63,11 @@ buttonInit.addEventListener('click', () => {
 })
 
 buttonStop.addEventListener('click', () => {
-    if (gameStatus) {
-        // Reiniciar las variables del juego y establecer el [gameStatus] a "false"
-        tableBlocks.forEach(block => { block.innerHTML = '' })
-        for (let block in gameTable) { gameTable[block] = '' }
-        gameStatus = false
-        gameScreen.innerHTML = 'Presione \'Iniciar\'...'
-    }
-    console.log(`Botón "Detener". Estado del juego: ${gameStatus}`)
+    // Reiniciar las variables del juego y establecer el [gameStatus] a "false"
+    tableBlocks.forEach(block => { block.innerHTML = '' })
+    for (let block in gameTable) { gameTable[block] = '' }
+    gameStatus = false
+    gameScreen.innerHTML = 'Presione \'Iniciar\'...'
 })
 
 //* Controles de la pantalla de alerta [gameMode]
@@ -90,11 +97,13 @@ buttonsWinnerOrDraw.forEach(button => {
     button.addEventListener('click', () => {
         if (button.className === 'playerVsPC') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
-            gameStatus = true
-            currentPlayer = 'x'
 
         } else if (button.className === 'playerVsPlayer') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
+            buttonStop.click()
+            gameStatus = true
+            currentPlayer = 'x'
+            // todo: terminar la ejecución del menu de ganador o tabla.
         }
     })
 })
