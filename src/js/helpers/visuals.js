@@ -1,9 +1,9 @@
 // Funciones visuales para el juego
 export function updateTableBlocks(block, currentPlayer) {
     if (currentPlayer === 'x') {
-        block.innerHTML = `<div class='blkCross'><img src="/src/assets/cross.png" alt="cross" /></div>`
+        block.innerHTML = `<div class='blkCross'><img src="./cross.png" alt="cross" /></div>`
     } else if (currentPlayer === 'o') {
-        block.innerHTML = `<div class='blkCircle'><img src="/src/assets/circle.png" alt="cross" /></div>`
+        block.innerHTML = `<div class='blkCircle'><img src="./circle.png" alt="cross" /></div>`
     }
 }
 
