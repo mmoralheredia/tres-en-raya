@@ -7,11 +7,15 @@ export function updateTableBlocks(block, currentPlayer) {
     }
 }
 
-export function updateScreen(gameScreen, currentPlayer) {
+export function updateScreen(gameScreen, currentPlayer, typePlayerPc) {
     if (currentPlayer === 'x') {
         gameScreen.innerHTML = 'Turno de \'X\''
     } else if (currentPlayer === 'o') {
         gameScreen.innerHTML = 'Turno de \'O\''
+    }
+
+    if (typePlayerPc === currentPlayer) {
+        gameScreen.innerHTML += ' (PC)...'
     }
 }
 

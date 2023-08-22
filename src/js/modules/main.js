@@ -21,3 +21,15 @@ export function checkWinnerOrDraw(gameTable) {
         return 'tabla'
     }
 }
+
+export function playPC(gameStatus, tableBlocks, currentPlayer, typePlayerPc) {
+    let randomPlayPc = 3
+
+    if (currentPlayer === typePlayerPc || gameStatus === true) {
+        console.log('Juega la PC')
+        setTimeout(() => {
+            tableBlocks[randomPlayPc].click()
+        }, 1500)
+    }
+
+}
