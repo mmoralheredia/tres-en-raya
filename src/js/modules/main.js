@@ -22,14 +22,10 @@ export function checkWinnerOrDraw(gameTable) {
     }
 }
 
-export function playPC(gameStatus, tableBlocks, currentPlayer, typePlayerPc) {
-    let randomPlayPc = 3
-
-    if (currentPlayer === typePlayerPc || gameStatus === true) {
-        console.log('Juega la PC')
-        setTimeout(() => {
-            tableBlocks[randomPlayPc].click()
-        }, 1500)
+export function playPC(gameTable) {
+    let randomPlayPc = Math.floor(Math.random() * 9)
+    while (gameTable[randomPlayPc] != '') {
+        randomPlayPc = Math.floor(Math.random() * 9)
     }
-
+    return randomPlayPc
 }

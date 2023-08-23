@@ -26,8 +26,10 @@ const buttonCloseWinnerOrDraw = document.querySelector('.winnerOrDraw #closeWinn
 // Declaración de las variables globales del juego
 let currentPlayer = ''
 let gameStatus = false
-let gameVsPC = false
+let gameVsPc = false
 let typePlayerPc = ''
+let waitForPc = false
+let playedPc = 0
 let gameTable = ['', '', '', '', '', '', '', '', '']
 
 // Establecer los valores iniciales del juego.
@@ -37,27 +39,36 @@ gameScreen.innerHTML = 'Presione \'Iniciar\'...' //Valor inicial de la pantalla 
 //* ESCUCHA DEL TABLERO DE JUEGO Y BUCLE DEL JUEGO ACTIVO.
 tableBlocks.forEach((block, indexPlayed) => {
     block.addEventListener('click', () => {
-        if (gameStatus && block.innerHTML === '' && gameVsPC === false) {
+        if (gameStatus && block.innerHTML === '' && waitForPc === false) {
             gameFunctions.gameActive(currentPlayer, gameTable, indexPlayed)
             visualsFunctions.updateTableBlocks(block, currentPlayer)
-        } else if (gameStatus && block.innerHTML === '' && gameVsPC === true) {
-            gameFunctions.gameActive(currentPlayer, gameTable, indexPlayed)
-            visualsFunctions.updateTableBlocks(block, currentPlayer)
-        }
 
-        if (gameFunctions.checkWinnerOrDraw(gameTable) === 'ganador') {
-            visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
-            textWinnerOrDraw.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
-            gameScreen.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
-            gameStatus = false
-        } else if (gameFunctions.checkWinnerOrDraw(gameTable) === 'tabla') {
-            visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
-            textWinnerOrDraw.innerHTML = `Empate`
-            gameScreen.innerHTML = `Empate`
-            gameStatus = false
-        } else {
-            currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
-            visualsFunctions.updateScreen(gameScreen, currentPlayer, typePlayerPc)
+            // Comprueba si la jugada da ganador o tabla
+            if (gameFunctions.checkWinnerOrDraw(gameTable) === 'ganador') {
+                visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
+                textWinnerOrDraw.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
+                gameScreen.innerHTML = `Gana '${currentPlayer.toUpperCase()}'`
+                gameStatus = false
+            } else if (gameFunctions.checkWinnerOrDraw(gameTable) === 'tabla') {
+                visualsFunctions.turnOnAlertScreen(alertBackground, alertWinnerOrDraw)
+                textWinnerOrDraw.innerHTML = `Empate`
+                gameScreen.innerHTML = `Empate`
+                gameStatus = false
+            } else {
+                // Cambia el jugador actual y actualiza la pantalla
+                currentPlayer = assistantFunctions.changesCurrentPlayer(currentPlayer)
+                visualsFunctions.updateScreen(gameScreen, currentPlayer, typePlayerPc)
+            }
+
+            // Si el modo es player vs PC, y es el turno de la PC esta hace su jugada
+            if (gameVsPc === true && currentPlayer === typePlayerPc && gameStatus) {
+                waitForPc = true
+                setTimeout(() => {
+                    playedPc = gameFunctions.playPC(gameTable)
+                    waitForPc = false
+                    tableBlocks[playedPc].click()
+                }, 1500)
+            }
         }
     })
 })
@@ -75,8 +86,10 @@ buttonStop.addEventListener('click', () => {
     for (let block in gameTable) { gameTable[block] = '' }
     currentPlayer = ''
     gameStatus = false
-    gameVsPC = false
+    gameVsPc = false
     typePlayerPc = ''
+    waitForPc = false
+    playedPc = 0
     gameScreen.innerHTML = 'Presione \'Iniciar\'...'
 })
 
@@ -86,21 +99,28 @@ buttonsGameMode.forEach(button => {
         if (button.className === 'playerVsPC') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
             buttonStop.click()
-            gameVsPC = true
+            gameVsPc = true
             gameStatus = true
             //Usar la misma función de jugador random de inicio, para el tipo de jugador para la pc
             typePlayerPc = assistantFunctions.randomPlayerInit()
             currentPlayer = assistantFunctions.randomPlayerInit()
             visualsFunctions.updateScreen(gameScreen, currentPlayer, typePlayerPc)
-            // Ejecución de la pc
-            gameFunctions.playPC(gameStatus, tableBlocks, currentPlayer, typePlayerPc)
+            // Ejecución de la pc si le toca el primer turno
+            if (currentPlayer === typePlayerPc) {
+                waitForPc = true
+                setTimeout(() => {
+                    playedPc = gameFunctions.playPC(gameTable)
+                    waitForPc = false
+                    tableBlocks[playedPc].click()
+                }, 1500)
+            }
 
         } else if (button.className === 'playerVsPlayer') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
             buttonStop.click()
             gameStatus = true
             currentPlayer = assistantFunctions.randomPlayerInit()
-            visualsFunctions.updateScreen(gameScreen, currentPlayer)
+            visualsFunctions.updateScreen(gameScreen, currentPlayer, typePlayerPc)
         }
     })
 })
@@ -115,12 +135,21 @@ buttonsWinnerOrDraw.forEach(button => {
         if (button.className === 'playerVsPC') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertGameMode)
             buttonStop.click()
-            gameVsPC = true
+            gameVsPc = true
             gameStatus = true
             //Usar la misma función de jugador random de inicio, para el tipo de jugador para la pc
             typePlayerPc = assistantFunctions.randomPlayerInit()
             currentPlayer = assistantFunctions.randomPlayerInit()
             visualsFunctions.updateScreen(gameScreen, currentPlayer, typePlayerPc)
+            // Ejecución de la pc si le toca el primer turno
+            if (currentPlayer === typePlayerPc) {
+                waitForPc = true
+                setTimeout(() => {
+                    playedPc = gameFunctions.playPC(gameTable)
+                    waitForPc = false
+                    tableBlocks[playedPc].click()
+                }, 1500)
+            }
 
         } else if (button.className === 'playerVsPlayer') {
             visualsFunctions.turnOffScreenAlert(alertBackground, alertWinnerOrDraw)
